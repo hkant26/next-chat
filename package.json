@@ -6,7 +6,7 @@
     "mask": "npx tsx app/masks/build.ts",
     "mask:watch": "npx watch \"yarn mask\" app/masks",
     "dev": "concurrently -r \"yarn run mask:watch\" \"next dev\"",
-    "build": "npx update-browserslist-db@latest && yarn mask && cross-env BUILD_MODE=standalone next build",
+    "build": "yarn mask && cross-env BUILD_MODE=standalone next build",
     "start": "next start",
     "lint": "next lint",
     "export": "yarn mask && cross-env BUILD_MODE=export BUILD_APP=1 next build",
@@ -19,14 +19,17 @@
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev",
     "test": "node --no-warnings --experimental-vm-modules $(yarn bin jest) --watch",
     "test:ci": "node --no-warnings --experimental-vm-modules $(yarn bin jest) --ci",
-    "pages:build": "npx @cloudflare/next-on-pages --experimental-minify",
-    "deploy": "yarn pages:build && wrangler pages deploy"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@fortaine/fetch-event-source": "^3.0.6",
     "@hello-pangea/dnd": "^16.5.0",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "@next/third-parties": "^14.1.0",
+    "@opennextjs/cloudflare": "^1.14.8",
     "@svgr/webpack": "^6.5.1",
     "@vercel/analytics": "^0.1.11",
     "@vercel/speed-insights": "^1.0.2",
@@ -91,6 +94,10 @@
     "typescript": "5.2.2",
     "watch": "^1.0.2",
     "webpack": "^5.88.1"
+  },
+  "optionalDependencies": {
+    "esbuild": "^0.24.0",
+    "wrangler": "^4.53.0"
   },
   "resolutions": {
     "lint-staged/yaml": "^2.2.2"
