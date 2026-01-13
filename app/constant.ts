@@ -493,7 +493,7 @@ export const VISION_MODEL_REGEXES = [
   /o3/,
   /o4-mini/,
   /grok-4/i,
-  /gpt-5/
+  /gpt-5/,
 ];
 
 export const EXCLUDE_VISION_MODEL_REGEXES = [/claude-3-5-haiku-20241022/];
@@ -561,7 +561,7 @@ const googleModels = [
   "gemini-2.0-pro-exp",
   "gemini-2.0-pro-exp-02-05",
   "gemini-2.5-pro-preview-06-05",
-  "gemini-2.5-pro"
+  "gemini-2.5-pro",
 ];
 
 const anthropicModels = [
@@ -743,51 +743,7 @@ const ai302Models = [
 ];
 
 let seq = 1000; // 内置的模型序号生成器从1000开始
-export const DEFAULT_MODELS = [
-  ...openaiModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++, // Global sequence sort(index)
-    provider: {
-      id: "openai",
-      providerName: "OpenAI",
-      providerType: "openai",
-      sorted: 1, // 这里是固定的，确保顺序与之前内置的版本一致
-    },
-  })),
-  ...openaiModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++,
-    provider: {
-      id: "azure",
-      providerName: "Azure",
-      providerType: "azure",
-      sorted: 2,
-    },
-  })),
-  ...googleModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++,
-    provider: {
-      id: "google",
-      providerName: "Google",
-      providerType: "google",
-      sorted: 3,
-    },
-  })),
-  ...anthropicModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++,
-    provider: {
-      id: "anthropic",
-      providerName: "Anthropic",
-      providerType: "anthropic",
-      sorted: 4,
-    },
-  })),
+const CN_MODELS = [
   ...baiduModels.map((name) => ({
     name,
     available: true,
@@ -830,6 +786,64 @@ export const DEFAULT_MODELS = [
       providerName: "Tencent",
       providerType: "tencent",
       sorted: 8,
+    },
+  })),
+  ...deepseekModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "deepseek",
+      providerName: "DeepSeek",
+      providerType: "deepseek",
+      sorted: 13,
+    },
+  })),
+];
+
+const EN_MODELS = [
+  ...openaiModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++, // Global sequence sort(index)
+    provider: {
+      id: "openai",
+      providerName: "OpenAI",
+      providerType: "openai",
+      sorted: 1, // 这里是固定的，确保顺序与之前内置的版本一致
+    },
+  })),
+  ...openaiModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "azure",
+      providerName: "Azure",
+      providerType: "azure",
+      sorted: 2,
+    },
+  })),
+  ...googleModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "google",
+      providerName: "Google",
+      providerType: "google",
+      sorted: 3,
+    },
+  })),
+  ...anthropicModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "anthropic",
+      providerName: "Anthropic",
+      providerType: "anthropic",
+      sorted: 4,
     },
   })),
   ...moonshotModels.map((name) => ({
@@ -876,17 +890,6 @@ export const DEFAULT_MODELS = [
       sorted: 12,
     },
   })),
-  ...deepseekModels.map((name) => ({
-    name,
-    available: true,
-    sorted: seq++,
-    provider: {
-      id: "deepseek",
-      providerName: "DeepSeek",
-      providerType: "deepseek",
-      sorted: 13,
-    },
-  })),
   ...siliconflowModels.map((name) => ({
     name,
     available: true,
@@ -910,6 +913,8 @@ export const DEFAULT_MODELS = [
     },
   })),
 ] as const;
+
+export const DEFAULT_MODELS = [...CN_MODELS] as const;
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;

@@ -87,4 +87,4 @@ export async function GET(req: NextRequest) {
   return readArtifact(req);
 }
 
-export const runtime = "edge";
+export const runtime = "nodejs";
