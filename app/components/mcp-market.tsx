@@ -25,7 +25,7 @@ import {
   ListToolsResponse,
   McpConfigData,
   PresetServer,
-  ServerConfig,
+  ServerStdioConfig,
   ServerStatusResponse,
 } from "../mcp/types";
 import clsx from "clsx";
@@ -136,7 +136,7 @@ export function McpMarketPage() {
   useEffect(() => {
     if (!editingServerId || !config) return;
     const currentConfig = config.mcpServers[editingServerId];
-    if (currentConfig) {
+    if (currentConfig && currentConfig.kind === "stdio") {
       // 从当前配置中提取用户配置
       const preset = presetServers.find((s) => s.id === editingServerId);
       if (preset?.configSchema) {
@@ -207,7 +207,9 @@ export function McpMarketPage() {
         }
       });
 
-      const serverConfig: ServerConfig = {
+      const serverConfig: ServerStdioConfig = {
+        kind: "stdio",
+        type: "stdio",
         command: preset.command,
         args,
         ...(Object.keys(env).length > 0 ? { env } : {}),
@@ -259,7 +261,8 @@ export function McpMarketPage() {
         const serverId = preset.id;
         updateLoadingState(serverId, "Creating MCP client...");
 
-        const serverConfig: ServerConfig = {
+        const serverConfig: ServerStdioConfig = {
+          type: "stdio",
           command: preset.command,
           args: [...preset.baseArgs],
         };

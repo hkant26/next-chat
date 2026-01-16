@@ -1,13 +1,23 @@
 import fs from "fs";
 import path from "path";
 import { CN_MASKS } from "./cn";
-
+import { TW_MASKS } from "./tw";
+import { EN_MASKS } from "./en";
 import { type BuiltinMask } from "./typing";
+import { getLang } from "../locales";
+
+const getMasks = (lang: string) => {
+  if (lang === "cn") {
+    return CN_MASKS;
+  }
+  if (lang === "tw") {
+    return TW_MASKS;
+  }
+  return EN_MASKS;
+};
 
 const BUILTIN_MASKS: Record<string, BuiltinMask[]> = {
-  cn: CN_MASKS,
-  // tw: TW_MASKS,
-  // en: EN_MASKS,
+  [getLang()]: getMasks(getLang()),
 };
 
 const dirname = path.dirname(__filename);

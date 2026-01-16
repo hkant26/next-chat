@@ -11,7 +11,8 @@ import {
   McpClientData,
   McpConfigData,
   McpRequestMessage,
-  ServerConfig,
+  ServerStdioConfig,
+  ServerWSConfig,
   ServerStatusResponse,
 } from "./types";
 import fs from "fs/promises";
@@ -101,7 +102,7 @@ export async function getAllTools() {
 // 初始化单个客户端
 async function initializeSingleClient(
   clientId: string,
-  serverConfig: ServerConfig,
+  serverConfig: ServerStdioConfig | ServerWSConfig,
 ) {
   // 如果服务器状态是暂停，则不初始化
   if (serverConfig.status === "paused") {
@@ -161,7 +162,10 @@ export async function initializeMcpSystem() {
 }
 
 // 添加服务器
-export async function addMcpServer(clientId: string, config: ServerConfig) {
+export async function addMcpServer(
+  clientId: string,
+  config: ServerStdioConfig | ServerWSConfig,
+) {
   try {
     const currentConfig = await getMcpConfigFromFile();
     const isNewServer = !(clientId in currentConfig.mcpServers);

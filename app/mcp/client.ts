@@ -1,30 +1,22 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { WebSocketClientTransport } from "@modelcontextprotocol/sdk/client/websocket.js";
 import { MCPClientLogger } from "./logger";
-import { ListToolsResponse, McpRequestMessage, ServerConfig } from "./types";
+import {
+  ListToolsResponse,
+  McpRequestMessage,
+  ServerStdioConfig,
+  ServerWSConfig,
+} from "./types";
 import { z } from "zod";
 
 const logger = new MCPClientLogger();
 
 export async function createClient(
   id: string,
-  config: ServerConfig,
+  config: ServerStdioConfig | ServerWSConfig,
 ): Promise<Client> {
   logger.info(`Creating client for ${id}...`);
-
-  const transport = new StdioClientTransport({
-    command: config.command,
-    args: config.args,
-    env: {
-      ...Object.fromEntries(
-        Object.entries(process.env)
-          .filter(([_, v]) => v !== undefined)
-          .map(([k, v]) => [k, v as string]),
-      ),
-      ...(config.env || {}),
-    },
-  });
-
   const client = new Client(
     {
       name: `nextchat-mcp-client-${id}`,
@@ -34,7 +26,29 @@ export async function createClient(
       capabilities: {},
     },
   );
-  await client.connect(transport);
+  if (config.kind === "stdio") {
+    const transport = new StdioClientTransport({
+      command: config.command,
+      args: config.args,
+      env: {
+        ...Object.fromEntries(
+          Object.entries(process.env)
+            .filter(([_, v]) => v !== undefined)
+            .map(([k, v]) => [k, v as string]),
+        ),
+        ...(config.env || {}),
+      },
+    });
+    await client.connect(transport);
+    return client;
+  } else if (config.kind === "ws") {
+    let url = new URL(config.url);
+    if (config.api_key) {
+      url.searchParams.set("api_key", config.api_key);
+    }
+    const transport = new WebSocketClientTransport(url);
+    await client.connect(transport);
+  }
   return client;
 }
 

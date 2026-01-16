@@ -1,12 +1,10 @@
 {
   "mcpServers": {
     "finance": {
-      "timeout": 300,
       "type": "sse",
       "url": "https://finance.bktes.com/mcp",
-      "headers": {
-        "Authorization": "Bearer vY6I541d4eyWBUjzAArc6XbRtvhepEiWmKQO24xgPj0"
-      }
+      "auth": "vY6I541d4eyWBUjzAArc6XbRtvhepEiWmKQO24xgPj0",
+      "status": "active"
     }
   }
 }

@@ -110,16 +110,24 @@ export interface ServerStatusResponse {
 }
 
 // MCP 服务器配置相关类型
-export interface ServerConfig {
+export interface ServerStdioConfig {
+  kind?: "stdio";
   command: string;
   args: string[];
   env?: Record<string, string>;
   status?: "active" | "paused" | "error";
 }
 
+export interface ServerWSConfig {
+  kind?: "ws";
+  url: string;
+  api_key?: string;
+  status?: "active" | "paused" | "error";
+}
+
 export interface McpConfigData {
   // MCP Server 的配置
-  mcpServers: Record<string, ServerConfig>;
+  mcpServers: Record<string, ServerStdioConfig | ServerWSConfig>;
 }
 
 export const DEFAULT_MCP_CONFIG: McpConfigData = {
